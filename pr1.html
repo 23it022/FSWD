@@ -26,42 +26,55 @@
 
     <h1>Movie Collection Manager</h1>
 
-    <button onclick="addMovie('Interstellar', 'Sci-Fi', 8.6, 2014)">Add Interstellar</button>
-    <button onclick="listMoviesByGenre('Action')">List Action Movies</button>
+    <h2>Add a Movie</h2>
+    <input type="text" id="title" placeholder="Title">
+    <input type="text" id="genre" placeholder="Genre">
+    <input type="number" id="rating" placeholder="Rating" step="0.1" min="0" max="10">
+    <input type="number" id="releaseYear" placeholder="Release Year" min="1888" max="2023">
+    <button onclick="addMovie()">Add Movie</button>
+
+    <h2>Actions</h2>
+    <button onclick="listMoviesByGenre(prompt('Enter genre:'))">List Movies by Genre</button>
     <button onclick="findHighestRatedMovie()">Find Highest Rated Movie</button>
     <button onclick="getAllMovieTitles()">Get All Movie Titles</button>
-    <button onclick="findMoviesAfterYear(2005)">Find Movies After 2000</button>
+    <button onclick="findMoviesAfterYear(prompt('Enter year:'))">Find Movies After Year</button>
 
     <div id="output"></div>
 
     <script>
-     
         let movieCollection = [
             { title: "Inception", genre: "Sci-Fi", rating: 8.8, releaseYear: 2010 },
-            { title: " Mad Max: Fury Road", genre: "Action", rating: 9.2, releaseYear: 2015 },
+            { title: "Mad Max: Fury Road", genre: "Action", rating: 9.2, releaseYear: 2015 },
             { title: "The Dark Knight", genre: "Action", rating: 9.0, releaseYear: 2008 },
             { title: "Pulp Fiction", genre: "Crime", rating: 8.9, releaseYear: 1994 },
             { title: "The Shawshank Redemption", genre: "Drama", rating: 9.3, releaseYear: 1994 }
         ];
 
-    
-        function addMovie(title, genre, rating, releaseYear) {
-            movieCollection.push({ title, genre, rating, releaseYear });
-            displayMessage(`Added movie: ${title}`);
+        function addMovie() {
+            const title = document.getElementById('title').value;
+            const genre = document.getElementById('genre').value;
+            const rating = parseFloat(document.getElementById('rating').value);
+            const releaseYear = parseInt(document.getElementById('releaseYear').value);
+
+            if (title && genre && !isNaN(rating) && !isNaN(releaseYear)) {
+                movieCollection.push({ title, genre, rating, releaseYear });
+                displayMessage(`Added movie: ${title}`);
+                clearInputFields();
+            } else {
+                displayMessage('Please fill in all fields correctly.');
+            }
         }
 
-     
         function listMoviesByGenre(genre) {
             let output = `Movies in the genre "${genre}":<br>`;
             movieCollection.forEach(movie => {
-                if (movie.genre === genre) {
+                if (movie.genre.toLowerCase() === genre.toLowerCase()) {
                     output += `- ${movie.title} (${movie.releaseYear})<br>`;
                 }
             });
             displayMessage(output);
         }
 
-      
         function findHighestRatedMovie() {
             let highestRated = movieCollection[0];
             movieCollection.forEach(movie => {
@@ -72,13 +85,11 @@
             displayMessage(`Highest-rated movie: ${highestRated.title} with a rating of ${highestRated.rating}`);
         }
 
-        
         function getAllMovieTitles() {
             const titles = movieCollection.map(movie => movie.title);
             displayMessage(`All movie titles: ${titles.join(', ')}`);
         }
 
-       
         function findMoviesAfterYear(year) {
             let output = `Movies released after ${year}:<br>`;
             movieCollection.forEach(movie => {
@@ -89,7 +100,6 @@
             displayMessage(output);
         }
 
-        
         function displayMessage(message) {
             const outputDiv = document.getElementById('output');
             outputDiv.innerHTML += message + '<br>';
