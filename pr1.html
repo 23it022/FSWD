@@ -3,108 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Collection Manager</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        button {
-            margin: 5px;
-            padding: 10px;
-        }
-        #output {
-            margin-top: 20px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-    </style>
+    <title>Task Manager</title>
+    
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <h1>Movie Collection Manager</h1>
+    <h1>Task Manager</h1>
 
-    <h2>Add a Movie</h2>
-    <input type="text" id="title" placeholder="Title">
-    <input type="text" id="genre" placeholder="Genre">
-    <input type="number" id="rating" placeholder="Rating" step="0.1" min="0" max="10">
-    <input type="number" id="releaseYear" placeholder="Release Year" min="1888" max="2023">
-    <button onclick="addMovie()">Add Movie</button>
+    <form id="taskForm">
+        <input type="text" id="taskTitle" placeholder="Task Title" required>
+        <select id="taskStatus">
+            <option value="Pending">Pending</option>
+            <option value="Completed">Completed</option>
+        </select>
+        <input type="number" id="taskPriority" placeholder="Priority (1-5)" min="1" max="5" required>
+        <button type="submit">Add Task</button>
+    </form>
 
-    <h2>Actions</h2>
-    <button onclick="listMoviesByGenre(prompt('Enter genre:'))">List Movies by Genre</button>
-    <button onclick="findHighestRatedMovie()">Find Highest Rated Movie</button>
-    <button onclick="getAllMovieTitles()">Get All Movie Titles</button>
-    <button onclick="findMoviesAfterYear(prompt('Enter year:'))">Find Movies After Year</button>
+    <button id="showPending">Show Pending Tasks</button>
+    <button id="showCompleted">Show Completed Tasks</button>
+    <button id="showHighPriority">Show High Priority Task</button>
 
-    <div id="output"></div>
+    <div class="task-list" id="taskList"></div>
 
-    <script>
-        let movieCollection = [
-            { title: "Inception", genre: "Sci-Fi", rating: 8.8, releaseYear: 2010 },
-            { title: "Mad Max: Fury Road", genre: "Action", rating: 9.2, releaseYear: 2015 },
-            { title: "The Dark Knight", genre: "Action", rating: 9.0, releaseYear: 2008 },
-            { title: "Pulp Fiction", genre: "Crime", rating: 8.9, releaseYear: 1994 },
-            { title: "The Shawshank Redemption", genre: "Drama", rating: 9.3, releaseYear: 1994 }
-        ];
-
-        function addMovie() {
-            const title = document.getElementById('title').value;
-            const genre = document.getElementById('genre').value;
-            const rating = parseFloat(document.getElementById('rating').value);
-            const releaseYear = parseInt(document.getElementById('releaseYear').value);
-
-            if (title && genre && !isNaN(rating) && !isNaN(releaseYear)) {
-                movieCollection.push({ title, genre, rating, releaseYear });
-                displayMessage(`Added movie: ${title}`);
-                clearInputFields();
-            } else {
-                displayMessage('Please fill in all fields correctly.');
-            }
-        }
-
-        function listMoviesByGenre(genre) {
-            let output = `Movies in the genre "${genre}":<br>`;
-            movieCollection.forEach(movie => {
-                if (movie.genre.toLowerCase() === genre.toLowerCase()) {
-                    output += `- ${movie.title} (${movie.releaseYear})<br>`;
-                }
-            });
-            displayMessage(output);
-        }
-
-        function findHighestRatedMovie() {
-            let highestRated = movieCollection[0];
-            movieCollection.forEach(movie => {
-                if (movie.rating > highestRated.rating) {
-                    highestRated = movie;
-                }
-            });
-            displayMessage(`Highest-rated movie: ${highestRated.title} with a rating of ${highestRated.rating}`);
-        }
-
-        function getAllMovieTitles() {
-            const titles = movieCollection.map(movie => movie.title);
-            displayMessage(`All movie titles: ${titles.join(', ')}`);
-        }
-
-        function findMoviesAfterYear(year) {
-            let output = `Movies released after ${year}:<br>`;
-            movieCollection.forEach(movie => {
-                if (movie.releaseYear > year) {
-                    output += `- ${movie.title} (${movie.releaseYear})<br>`;
-                }
-            });
-            displayMessage(output);
-        }
-
-        function displayMessage(message) {
-            const outputDiv = document.getElementById('output');
-            outputDiv.innerHTML += message + '<br>';
-        }
-    </script>
+  
+    <script src="script.js"></script>
 
 </body>
 </html>
